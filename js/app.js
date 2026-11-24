@@ -17,6 +17,24 @@ function createTarea(titulo, descripcion) {
   saveTareas(tareas);
 }
 
+// Render the task list in the page
+function renderTareas() {
+  const lista = document.getElementById("lstTareas");
+  const tareas = getTareas();
+  lista.innerHTML = "";
+
+  if (tareas.length === 0) {
+    lista.innerHTML = '<li class="vacio">No hay tareas registradas.</li>';
+    return;
+  }
+
+  tareas.forEach((tarea) => {
+    const item = document.createElement("li");
+    item.innerHTML = `<strong>${tarea.titulo}</strong><p>${tarea.descripcion}</p>`;
+    lista.appendChild(item);
+  });
+}
+
 document.getElementById("frmTarea").addEventListener("submit", (e) => {
   e.preventDefault();
   const titulo = document.getElementById("txtTitulo").value;
@@ -24,5 +42,8 @@ document.getElementById("frmTarea").addEventListener("submit", (e) => {
 
   createTarea(titulo, descripcion);
   e.target.reset();
-  alert("Tarea guardada");
+  renderTareas();
 });
+
+// Show the saved tasks when the page loads
+renderTareas();
