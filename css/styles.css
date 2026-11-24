@@ -26,3 +26,27 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
+h2 {
+  margin-top: 24px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #f1f5f9;
+  padding: 10px 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+li p {
+  margin: 4px 0 0;
+}
+
+.vacio {
+  color: #64748b;
+}
