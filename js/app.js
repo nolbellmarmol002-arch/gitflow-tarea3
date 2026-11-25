@@ -32,7 +32,7 @@ function deleteTarea(id) {
   saveTareas(tareas);
 }
 
-// Validate the form fields and return an object with the error messages
+// Validate the form fields and return an object with error messages
 function validateTarea(titulo, descripcion) {
   const errores = {};
 
