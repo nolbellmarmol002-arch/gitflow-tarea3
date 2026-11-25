@@ -50,3 +50,9 @@ li p {
 .vacio {
   color: #64748b;
 }
+
+.btn-editar {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #f59e0b;
+}
