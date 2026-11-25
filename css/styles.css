@@ -63,3 +63,14 @@ li p {
   padding: 6px 12px;
   background: #dc2626;
 }
+
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  min-height: 1em;
+}
+
+input.invalid,
+textarea.invalid {
+  border: 1px solid #dc2626;
+}
