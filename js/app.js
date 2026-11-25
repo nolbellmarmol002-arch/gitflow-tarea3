@@ -26,6 +26,12 @@ function updateTarea(id, titulo, descripcion) {
   saveTareas(tareas);
 }
 
+// Delete a task by id
+function deleteTarea(id) {
+  const tareas = getTareas().filter((tarea) => tarea.id !== id);
+  saveTareas(tareas);
+}
+
 // Load a task into the form to edit it
 function editTarea(id) {
   const tarea = getTareas().find((t) => t.id === id);
@@ -36,6 +42,21 @@ function editTarea(id) {
   document.getElementById("txtDescripcion").value = tarea.descripcion;
   document.getElementById("btnGuardar").textContent = "Actualizar tarea";
   document.getElementById("txtTitulo").focus();
+}
+
+// Ask for confirmation and delete a task
+function confirmDeleteTarea(id) {
+  if (!confirm("¿Seguro que deseas eliminar esta tarea?")) return;
+
+  // If the deleted task was being edited, reset the form
+  if (idEditando === id) {
+    idEditando = null;
+    document.getElementById("frmTarea").reset();
+    document.getElementById("btnGuardar").textContent = "Guardar tarea";
+  }
+
+  deleteTarea(id);
+  renderTareas();
 }
 
 // Render the task list in the page
@@ -64,7 +85,13 @@ function renderTareas() {
     btnEditar.className = "btn-editar";
     btnEditar.addEventListener("click", () => editTarea(tarea.id));
 
-    item.append(titulo, descripcion, btnEditar);
+    const btnEliminar = document.createElement("button");
+    btnEliminar.type = "button";
+    btnEliminar.textContent = "Eliminar";
+    btnEliminar.className = "btn-eliminar";
+    btnEliminar.addEventListener("click", () => confirmDeleteTarea(tarea.id));
+
+    item.append(titulo, descripcion, btnEditar, btnEliminar);
     lista.appendChild(item);
   });
 }
