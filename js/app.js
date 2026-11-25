@@ -26,7 +26,7 @@ function updateTarea(id, titulo, descripcion) {
   saveTareas(tareas);
 }
 
-// Delete a task by id
+// Delete a task by id and persist the new list
 function deleteTarea(id) {
   const tareas = getTareas().filter((tarea) => tarea.id !== id);
   saveTareas(tareas);
