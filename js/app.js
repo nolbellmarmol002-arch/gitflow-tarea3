@@ -32,12 +32,42 @@ function deleteTarea(id) {
   saveTareas(tareas);
 }
 
+// Validate the form fields and return an object with the error messages
+function validateTarea(titulo, descripcion) {
+  const errores = {};
+
+  if (titulo.length === 0) {
+    errores.titulo = "El título es obligatorio.";
+  } else if (titulo.length < 3) {
+    errores.titulo = "El título debe tener al menos 3 caracteres.";
+  } else if (titulo.length > 50) {
+    errores.titulo = "El título no puede superar los 50 caracteres.";
+  }
+
+  if (descripcion.length === 0) {
+    errores.descripcion = "La descripción es obligatoria.";
+  } else if (descripcion.length > 200) {
+    errores.descripcion = "La descripción no puede superar los 200 caracteres.";
+  }
+
+  return errores;
+}
+
+// Show or clear the validation messages in the form
+function showErrores(errores) {
+  document.getElementById("errTitulo").textContent = errores.titulo || "";
+  document.getElementById("errDescripcion").textContent = errores.descripcion || "";
+  document.getElementById("txtTitulo").classList.toggle("invalid", Boolean(errores.titulo));
+  document.getElementById("txtDescripcion").classList.toggle("invalid", Boolean(errores.descripcion));
+}
+
 // Load a task into the form to edit it
 function editTarea(id) {
   const tarea = getTareas().find((t) => t.id === id);
   if (!tarea) return;
 
   idEditando = id;
+  showErrores({});
   document.getElementById("txtTitulo").value = tarea.titulo;
   document.getElementById("txtDescripcion").value = tarea.descripcion;
   document.getElementById("btnGuardar").textContent = "Actualizar tarea";
@@ -53,6 +83,7 @@ function confirmDeleteTarea(id) {
     idEditando = null;
     document.getElementById("frmTarea").reset();
     document.getElementById("btnGuardar").textContent = "Guardar tarea";
+    showErrores({});
   }
 
   deleteTarea(id);
@@ -98,8 +129,13 @@ function renderTareas() {
 
 document.getElementById("frmTarea").addEventListener("submit", (e) => {
   e.preventDefault();
-  const titulo = document.getElementById("txtTitulo").value;
-  const descripcion = document.getElementById("txtDescripcion").value;
+  const titulo = document.getElementById("txtTitulo").value.trim();
+  const descripcion = document.getElementById("txtDescripcion").value.trim();
+
+  // Stop if the form has validation errors
+  const errores = validateTarea(titulo, descripcion);
+  showErrores(errores);
+  if (Object.keys(errores).length > 0) return;
 
   if (idEditando !== null) {
     updateTarea(idEditando, titulo, descripcion);

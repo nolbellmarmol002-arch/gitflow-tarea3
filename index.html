@@ -10,12 +10,14 @@
   <main class="contenedor">
     <h1>Gestor de Tareas</h1>
 
-    <form id="frmTarea">
+        <form id="frmTarea" novalidate>
       <label for="txtTitulo">Título</label>
       <input type="text" id="txtTitulo">
+      <span class="error" id="errTitulo"></span>
 
       <label for="txtDescripcion">Descripción</label>
       <textarea id="txtDescripcion" rows="3"></textarea>
+      <span class="error" id="errDescripcion"></span>
 
       <button type="submit" id="btnGuardar">Guardar tarea</button>
     </form>
