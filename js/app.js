@@ -1,4 +1,5 @@
 const STORAGE_KEY = "tareas";
+let idEditando = null;
 
 // Read all tasks from localStorage
 function getTareas() {
@@ -17,6 +18,26 @@ function createTarea(titulo, descripcion) {
   saveTareas(tareas);
 }
 
+// Update an existing task by id
+function updateTarea(id, titulo, descripcion) {
+  const tareas = getTareas().map((tarea) =>
+    tarea.id === id ? { ...tarea, titulo, descripcion } : tarea
+  );
+  saveTareas(tareas);
+}
+
+// Load a task into the form to edit it
+function editTarea(id) {
+  const tarea = getTareas().find((t) => t.id === id);
+  if (!tarea) return;
+
+  idEditando = id;
+  document.getElementById("txtTitulo").value = tarea.titulo;
+  document.getElementById("txtDescripcion").value = tarea.descripcion;
+  document.getElementById("btnGuardar").textContent = "Actualizar tarea";
+  document.getElementById("txtTitulo").focus();
+}
+
 // Render the task list in the page
 function renderTareas() {
   const lista = document.getElementById("lstTareas");
@@ -30,7 +51,20 @@ function renderTareas() {
 
   tareas.forEach((tarea) => {
     const item = document.createElement("li");
-    item.innerHTML = `<strong>${tarea.titulo}</strong><p>${tarea.descripcion}</p>`;
+
+    const titulo = document.createElement("strong");
+    titulo.textContent = tarea.titulo;
+
+    const descripcion = document.createElement("p");
+    descripcion.textContent = tarea.descripcion;
+
+    const btnEditar = document.createElement("button");
+    btnEditar.type = "button";
+    btnEditar.textContent = "Editar";
+    btnEditar.className = "btn-editar";
+    btnEditar.addEventListener("click", () => editTarea(tarea.id));
+
+    item.append(titulo, descripcion, btnEditar);
     lista.appendChild(item);
   });
 }
@@ -40,7 +74,14 @@ document.getElementById("frmTarea").addEventListener("submit", (e) => {
   const titulo = document.getElementById("txtTitulo").value;
   const descripcion = document.getElementById("txtDescripcion").value;
 
-  createTarea(titulo, descripcion);
+  if (idEditando !== null) {
+    updateTarea(idEditando, titulo, descripcion);
+    idEditando = null;
+    document.getElementById("btnGuardar").textContent = "Guardar tarea";
+  } else {
+    createTarea(titulo, descripcion);
+  }
+
   e.target.reset();
   renderTareas();
 });
